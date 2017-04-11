@@ -1,41 +1,42 @@
 
-import pandas as pd 
-import numpy, scipy
+
+
+
+# License: BSD 3 clause
+
+import numpy
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import pandas as pd
+
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
+from sklearn import decomposition
+from sklearn import datasets
 
+numpy.random.seed(5)
 
-
-#beer_reviews = pd.read_csv("beer_reviews.csv")
+centers = [[1, 1], [-1, -1], [1, -1]]
+iris = datasets.load_iris()
+X = iris.data
 beer_reviews = pd.read_csv("test.csv")
-
-brewery_name = beer_reviews.brewery_name
-review_overall = beer_reviews.review_overall
-review_aroma = beer_reviews.review_aroma
-review_appearance = beer_reviews.review_appearance
-beer_style = beer_reviews.beer_style
-review_palate = beer_reviews.review_palate
-review_taste = beer_reviews.review_taste
-beer_name = beer_reviews.beer_name
-beer_abv = beer_reviews.beer_abv
+X = beer_reviews[['review_palate','review_appearance','review_aroma','review_taste']].as_matrix()
 
 
-a = set()
 
-for row in beer_name:
-	a.add(row)
-print len(a)
+pca = decomposition.PCA(n_components=4)
+pca.fit(X)
+X = pca.transform(X)
+print X
 
 
-X = beer_reviews[['review_palate','review_appearance']].as_matrix()
 #X = StandardScaler().fit_transform(X)
 
 
-print X
 
-db = DBSCAN(eps=0.1, min_samples=7).fit(X)
+
+db = DBSCAN(eps=0.3, min_samples=7).fit(X)
 core_samples_mask = numpy.zeros_like(db.labels_, dtype = bool)
 core_samples_mask[db.core_sample_indices_] = True
 
