@@ -15,28 +15,28 @@ from sklearn.preprocessing import StandardScaler
 from sklearn import decomposition
 from sklearn import datasets
 
-numpy.random.seed(5)
 
-centers = [[1, 1], [-1, -1], [1, -1]]
-iris = datasets.load_iris()
-X = iris.data
+
+
 beer_reviews = pd.read_csv("test.csv")
-X = beer_reviews[['review_palate','review_appearance','review_aroma','review_taste']].as_matrix()
+X = beer_reviews[['review_palate','review_appearance','review_aroma','review_taste']]#.as_matrix()
 
 
-
-pca = decomposition.PCA(n_components=4)
+#se inicializa pca para dos dimensiones
+pca = decomposition.PCA(n_components=2)
+#fit the model with X
 pca.fit(X)
+#apply dimensionality reduction to X
 X = pca.transform(X)
-print X
-
-
-#X = StandardScaler().fit_transform(X)
 
 
 
 
-db = DBSCAN(eps=0.3, min_samples=7).fit(X)
+
+
+
+
+db = DBSCAN(eps=0.2, min_samples=7).fit(X)
 core_samples_mask = numpy.zeros_like(db.labels_, dtype = bool)
 core_samples_mask[db.core_sample_indices_] = True
 
